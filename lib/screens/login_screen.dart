@@ -84,7 +84,6 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Shape
           ClipPath(
             clipper: BackgroundClipper(),
             child: Container(
@@ -110,6 +109,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           // Main Content wrapped in SingleChildScrollView
           SingleChildScrollView(
+            physics: NeverScrollableScrollPhysics(),
             child: Center(
               child: isLandscape
                   ? Column(
