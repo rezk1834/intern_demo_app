@@ -80,9 +80,9 @@ class DetailPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            bottom: 16,
-            left: 16,
-            right: 16,
+            bottom: 10,
+            left: 10,
+            right: 10,
             child: ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -91,9 +91,9 @@ class DetailPage extends StatelessWidget {
                 backgroundColor: Theme.of(context).primaryColor,
                 padding: EdgeInsets.symmetric(vertical: 10),
                 textStyle: TextStyle(fontSize: 20),
-                minimumSize: Size(double.infinity, 50),
+                minimumSize: Size(double.infinity, 25),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(25),
                 ),
               ),
               child: Text("Go Back", style: TextStyle(color: Colors.white),),

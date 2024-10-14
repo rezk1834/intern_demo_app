@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
               padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
               textStyle: TextStyle(fontSize: 18),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(25),
               ),
               backgroundColor: Theme.of(context).primaryColor,
             ),

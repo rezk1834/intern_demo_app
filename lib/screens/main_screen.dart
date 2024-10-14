@@ -73,7 +73,7 @@ class _MainPageState extends State<MainPage> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 80, 16, 0),
+              padding: const EdgeInsets.fromLTRB(16, 80, 16, 5),
               child: TextField(
                 onChanged: (query) {
                   setState(() {
@@ -87,7 +87,7 @@ class _MainPageState extends State<MainPage> {
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(25),
                     borderSide: BorderSide.none,
                   ),
                 ),
@@ -114,7 +114,7 @@ class _MainPageState extends State<MainPage> {
                     }
                     final item = _filteredItems[index];
                     return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
                       child: InkWell(
                         onTap: () {
                           Navigator.push(
