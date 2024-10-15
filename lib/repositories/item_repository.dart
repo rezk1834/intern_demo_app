@@ -5,6 +5,9 @@ import '../models/item_model.dart';
 class ItemRepository {
   // Base URL of the API
   final String apiUrl = 'https://jsonplaceholder.typicode.com/posts';
+  final http.Client client;
+
+  ItemRepository({http.Client? client}) : client = client ?? http.Client();
 
   Future<List<Item>> fetchItems({int page = 1, int limit = 10}) async {
     // Fetch all items from the API

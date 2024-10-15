@@ -37,6 +37,10 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_bloc: ^8.1.6
   http: ^1.2.2
+  get: ^4.6.6
+  phone_number: ^2.1.0
+  mockito: ^5.4.4
+  bloc_test: ^9.1.7
 
 dev_dependencies:
   flutter_test:
