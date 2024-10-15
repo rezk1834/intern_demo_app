@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:phone_number/phone_number.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -102,7 +103,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     );
   }
 
-  Widget _buildHelpCard(String title, String subtitle, VoidCallback onTap) {
+  Widget _buildHelpCard(String title, String subtitle, String url) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: ListTile(
@@ -112,10 +113,17 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
         ),
         subtitle: Text(subtitle),
         trailing: Icon(Icons.arrow_forward),
-        onTap: onTap,
+        onTap: () async {
+          if (await canLaunch(url)) {
+            await launch(url);
+          } else {
+            throw 'Could not launch $url';
+          }
+        },
       ),
     );
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -156,6 +164,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             position: _formAnimation,
             child: Center(
               child: SingleChildScrollView(
+                physics: NeverScrollableScrollPhysics(),
                 child: isLandscape
                     ? Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -168,8 +177,9 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              SizedBox(height:screenSize.height * 0.275),
                               _buildPhoneNumberInput(),
-                              SizedBox(height: 20),
+                              SizedBox(height: 45),
                               _buildLoginButton(),
                             ],
                           ),
@@ -178,24 +188,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     ),
                     SizedBox(width: 20),
                     Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _buildHelpCard(
-                            "Need Help?",
-                            "Contact the developer.",
-                                () {
-                              // Navigate to help page or show a dialog
-                            },
-                          ),
-                          _buildHelpCard(
-                            "Create an Account",
-                            "Sign up if you don't have an account.",
-                                () {
-                              // Navigate to registration page
-                            },
-                          ),
-                        ],
+                      child: _buildHelpCard(
+                        "Need Help?",
+                        "Contact the developer.",
+                        'https://www.linkedin.com/in/moustafarezk1834/',
                       ),
                     ),
                   ],
@@ -223,16 +219,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     _buildHelpCard(
                       "Need Help?",
                       "Contact the developer.",
-                          () {
-                        // Navigate to help page or show a dialog
-                      },
-                    ),
-                    _buildHelpCard(
-                      "Create an Account",
-                      "Sign up if you don't have an account.",
-                          () {
-                        // Navigate to registration page
-                      },
+                      'https://www.linkedin.com/in/moustafarezk1834/',
                     ),
                   ],
                 ),

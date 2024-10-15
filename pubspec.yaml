@@ -41,6 +41,7 @@ dependencies:
   phone_number: ^2.1.0
   mockito: ^5.4.4
   bloc_test: ^9.1.7
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:
