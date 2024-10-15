@@ -1,13 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:phone_number/phone_number.dart';
 
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
   final TextEditingController _phoneController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  late AnimationController _animationController;
+  late Animation<Offset> _formAnimation;
+  late Animation<double> _fadeInAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1000),
+    );
+
+    // Slide-up animation for the form
+    _formAnimation = Tween<Offset>(
+      begin: Offset(0, 1),
+      end: Offset(0, 0),
+    ).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
+    );
+
+    // Fade-in animation for the welcome text
+    _fadeInAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
+    );
+
+    // Start the animation
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    _phoneController.dispose();
+    super.dispose();
+  }
 
   void _login() {
     if (_formKey.currentState!.validate()) {
@@ -31,11 +71,12 @@ class _LoginPageState extends State<LoginPage> {
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter your phone number';
-        } else if (!RegExp(r'^\+?\d{10,}$').hasMatch(value)) {
+        } else if (!RegExp(r'^\+?\d{10,11}$').hasMatch(value)) {
           return 'Please enter a valid phone number';
         }
         return null;
       },
+
     );
   }
 
@@ -95,106 +136,106 @@ class _LoginPageState extends State<LoginPage> {
                   end: Alignment.bottomRight,
                 ),
               ),
-              child: Center(
-                child: Text(
-                  'Welcome!',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+              child: FadeTransition(
+                opacity: _fadeInAnimation,
+                child: Center(
+                  child: Text(
+                    'Welcome!',
+                    style: TextStyle(
+                      fontSize: 50,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-          // Main Content wrapped in SingleChildScrollView
-          SingleChildScrollView(
-            physics: NeverScrollableScrollPhysics(),
+          // Main Content with Slide Animation
+          SlideTransition(
+            position: _formAnimation,
             child: Center(
-              child: isLandscape
-                  ? Column(
-                children: [
-                  SizedBox(height: screenSize.height * 0.4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Form(
-                            key: _formKey,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                _buildPhoneNumberInput(),
-                                SizedBox(height: 20),
-                                _buildLoginButton(),
-                              ],
-                            ),
+              child: SingleChildScrollView(
+                child: isLandscape
+                    ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _buildPhoneNumberInput(),
+                              SizedBox(height: 20),
+                              _buildLoginButton(),
+                            ],
                           ),
                         ),
                       ),
-                      SizedBox(width: 20),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _buildHelpCard(
-                              "Need Help?",
-                              "Contact the developer.",
-                                  () {
-                                // Navigate to help page or show a dialog
-                              },
-                            ),
-                            _buildHelpCard(
-                              "Create an Account",
-                              "Sign up if you don't have an account.",
-                                  () {
-                                // Navigate to registration page
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              )
-                  : Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(height: screenSize.height * 0.45),
-                  // Phone Number Input
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Form(
-                      key: _formKey,
+                    ),
+                    SizedBox(width: 20),
+                    Expanded(
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          _buildPhoneNumberInput(),
-                          SizedBox(height: 20),
-                          _buildLoginButton(),
+                          _buildHelpCard(
+                            "Need Help?",
+                            "Contact the developer.",
+                                () {
+                              // Navigate to help page or show a dialog
+                            },
+                          ),
+                          _buildHelpCard(
+                            "Create an Account",
+                            "Sign up if you don't have an account.",
+                                () {
+                              // Navigate to registration page
+                            },
+                          ),
                         ],
                       ),
                     ),
-                  ),
-                  SizedBox(height: 20),
-                  // Displaying additional info as ListTiles
-                  _buildHelpCard(
-                    "Need Help?",
-                    "Contact the developer.",
-                        () {
-                      // Navigate to help page or show a dialog
-                    },
-                  ),
-                  _buildHelpCard(
-                    "Create an Account",
-                    "Sign up if you don't have an account.",
-                        () {
-                      // Navigate to registration page
-                    },
-                  ),
-                ],
+                  ],
+                )
+                    : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: screenSize.height * 0.45),
+                    // Phone Number Input
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            _buildPhoneNumberInput(),
+                            SizedBox(height: 20),
+                            _buildLoginButton(),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    // Displaying additional info as ListTiles
+                    _buildHelpCard(
+                      "Need Help?",
+                      "Contact the developer.",
+                          () {
+                        // Navigate to help page or show a dialog
+                      },
+                    ),
+                    _buildHelpCard(
+                      "Create an Account",
+                      "Sign up if you don't have an account.",
+                          () {
+                        // Navigate to registration page
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
